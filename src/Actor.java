@@ -130,6 +130,7 @@ public class Actor {
         while(curr != start && curr.parent!=null)
         {
             curr = curr.parent;
+            System.out.println("Curr node: " + curr.row + " " + curr.col);
             curr.open=false;
             curr.closed=false;
             curr.solid=false;
