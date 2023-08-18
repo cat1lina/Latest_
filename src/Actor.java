@@ -1,44 +1,19 @@
-import java.util.ArrayList;
 
+
+import java.util.ArrayList;
 
 public class Actor {
 
-
-    final static int mcol = 15;
-    final static int mrow = 15;
-
-    public static Node[][] Cost_Map = new Node[15][15];
-
-    public static Node[][] SolidsMap = Map.Solids_Map;
-
-    public void setMap()
-    {
-        for(int i=0;i<mrow;i++)
-        {
-            for(int j=0;j<mcol;j++)
-            {
-                Cost_Map[i][j] = new Node(i,j);
-            }
-        }
-    }
-
-
-
-
     Node start, goal, curr;
     ArrayList<Node> openlist = new ArrayList<>();
-
     boolean goalreached = false;
 
-    //Node[][] node6 = getNodeArray();
+    Node[][] node = Map.getNodeArray();
+    int mrow=Map.getMrow();
+    int mcol=Map.getMcol();
 
-
-    public Actor() {
-        setMap();
-    }
     public Actor(int xs,int ys,int xg,int yg)
     {
-        setMap();
         setAsStart(xs,ys);
         setAsGoal(xg,yg);
 
@@ -47,39 +22,28 @@ public class Actor {
 
     public void setAsStart(int row, int col)
     {
-        if(!SolidsMap[row][col].solid)
-        {
-            SolidsMap[row][col].setAsStart();
-            start = Cost_Map[row][col];
-            curr = start;
-            curr.solid = true;
-        }
-        else
-        {
-            System.out.println("Start node is a solid!! Choose another.");
-        }
+        node[row][col].setAsStart();
+        start= node[row][col];
+        curr=start;
+        curr.solid=true;
     }
+
     public void setAsGoal(int row, int col)
     {
-        if(!SolidsMap[row][col].solid) {
-            SolidsMap[row][col].setAsGoal();
-            goal = Cost_Map[row][col];
-        }
-        else {
-            System.out.println("Goal node is a solid!! Choose another.");
-        }
+        node[row][col].setAsGoal();
+        goal= node[row][col];
     }
+
     public void setCost()
     {
         for(int i=0;i<mcol;i++)
         {
             for(int j=0;j<mrow;j++)
             {
-                getCost(SolidsMap[j][i]);
+                getCost(node[j][i]);
             }
         }
     }
-
 
     private void getCost(Node node)
     {
@@ -89,25 +53,23 @@ public class Actor {
 
     }
 
-
     public void search()
     {
-        setCost();
         while(!goalreached)
         {
             synchronized(this)
             {
-
+                setCost();
                 curr.solid=true;
-                try
-                {
-                    Thread.sleep(100);
-                }
-                catch (InterruptedException e)
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+//                try
+//                {
+//                    Thread.sleep(10);
+//                }
+//                catch (InterruptedException e)
+//                {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
                 curr.setAsChecked();
                 openlist.remove(curr);
                 int x = curr.col;
@@ -116,9 +78,10 @@ public class Actor {
                 {
                     for (int j = (Math.max(y - 1, 0)); j < (Math.min(y + 2, 15)); j++)
                     {
-                        if (!openlist.contains(Cost_Map[i][j]) && !SolidsMap[i][j].solid)
+                        if (!openlist.contains(node[j][i]) && !node[j][i].solid)
                         {
-                            openNode(SolidsMap[j][i]);
+                            openNode(node[j][i]);
+                            openlist.add(node[j][i]);
                         }
                     }
                 }
@@ -136,8 +99,10 @@ public class Actor {
                     }
                     curr.solid=false;
                     curr=minnode;
-                    if(minnode.row == goal.row && minnode.col == goal.col)
+                    //System.out.println(" Curr: (" + curr.row + "," + curr.col + ")");
+                    if(minnode == goal)
                     {
+                        System.out.println("GOAL REACH!");
                         goalreached = true;
                         track();
                         openlist.clear();
@@ -160,20 +125,16 @@ public class Actor {
 
     private void track()
     {
-
-        Node curr = SolidsMap[goal.row][goal.col];
+        Node curr = goal;
         curr.solid=true;
-        while(curr.col != start.col && curr.row != start.row  /*curr.parent != null*/)
+        while(curr != start && curr.parent!=null)
         {
-            System.out.println("END REACHED");
             curr = curr.parent;
             curr.open=false;
             curr.closed=false;
             curr.solid=false;
-
-            if(curr.col != start.col && curr.row != start.row)
+            if(curr!= start)
             {
-
                 curr.setPath();
 
             }

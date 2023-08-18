@@ -1,6 +1,10 @@
+
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.Serial;
+
 import javax.swing.JPanel;
 
 
@@ -8,7 +12,7 @@ public class Map extends JPanel{
     /**
      *
      */
-
+    @Serial
     private static final long serialVersionUID = 1L;
     final static int mcol = 15;
     final static int mrow = 15;
@@ -16,7 +20,23 @@ public class Map extends JPanel{
     final int screenx = node_size * mcol;
     final int screeny= node_size * mrow;
 
-    public static Node[][] Solids_Map = new Node[mrow][mcol];
+
+    public static Node[][] node = new Node[mrow][mcol];
+
+    public static Node[][] getNodeArray()
+    {
+        return node;
+    }
+
+    public static int getMcol()
+    {
+        return mcol;
+    }
+
+    public static int getMrow()
+    {
+        return mrow;
+    }
 
     public Map()
     {
@@ -26,8 +46,21 @@ public class Map extends JPanel{
 //	this.addKeyListener(new KeyHandler(this,this));
         this.setFocusable(true);
 
-        setMap();
+        int col=0;
+        int row=0;
 
+        while(col<mcol && row < mrow)
+        {
+            node[row][col] = new Node(row,col);
+            this.add(node[row][col]);
+
+            col++;
+            if(col == mcol)
+            {
+                col =0;
+                row++;
+            }
+        }
         setAsSolid( 2,3);
         setAsSolid( 3,3);
         setAsSolid( 4,4);
@@ -43,37 +76,9 @@ public class Map extends JPanel{
         setAsSolid( 11,7);
 
     }
-    public void setMap()
-    {
-        int col=0;
-        int row=0;
 
-        while(col<mcol && row < mrow)
-        {
-            Solids_Map[row][col] = new Node(row,col);
-            this.add(Solids_Map[row][col]);
-
-            col++;
-            if(col == mcol)
-            {
-                col =0;
-                row++;
-            }
-        }
-    }
-
-//    public void resetMap()
-//    {
-//        for(int i=0;i<mcol;i++)
-//        {
-//            for(int j=0;j<mrow;j++)
-//            {
-//                node[i][j].setAsUnchecked();
-//            }
-//        }
-//    }
     private void setAsSolid(int row, int col)
     {
-        Solids_Map[row][col].setSolid();
+        node[row][col].setSolid();
     }
 }

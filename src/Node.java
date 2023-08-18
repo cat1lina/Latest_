@@ -1,6 +1,4 @@
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javax.swing.JFrame;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +17,7 @@ public class Node  extends JButton implements ActionListener
     boolean open =false ;
     boolean closed=false;
 
-    public Node(int col,int row)
+    public Node(int row,int col)
     {
         this.col=col;
         this.row=row;
@@ -71,7 +69,6 @@ public class Node  extends JButton implements ActionListener
     {
         if(!start && !goal && !solid)
         {
-            setBackground(Color.white);
             setForeground(Color.green);
 
         }

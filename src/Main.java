@@ -1,5 +1,3 @@
-
-
 import javax.swing.JFrame;
 
 public class Main{
@@ -17,13 +15,13 @@ public class Main{
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        //Thread_runnable thread = new Thread_runnable(0, 0, 4, 6);
-        Thread_runnable thread2 = new Thread_runnable(10,10,10,3);
+        Thread_runnable thread = new Thread_runnable(0,0,4,6);
+        Thread_runnable thread2 = new Thread_runnable(10,4,12,12);
 
-        //Thread t1 = new Thread(thread);
+        Thread t1 = new Thread(thread);
         Thread t2 = new Thread(thread2);
 
-        //t1.start();
+        t1.start();
         t2.start();
 
     }
